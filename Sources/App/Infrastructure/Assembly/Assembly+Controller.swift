@@ -10,7 +10,8 @@ extension Assembly {
   
   private var authController: AuthController {
     return AuthController(
-      userApi: userApi
+      userApi: userApi,
+      generateAuthToken: generateAuthToken
     )
   }
   

@@ -10,9 +10,13 @@ private struct Parameter {
 struct AuthController {
 
   private let userApi: UserApi
+  private let generateAuthToken: GenerateAuthToken
   
-  init(userApi: UserApi) {
+  init(userApi: UserApi,
+       generateAuthToken: GenerateAuthToken)
+  {
     self.userApi = userApi
+    self.generateAuthToken = generateAuthToken
   }
   
   func login(_ request: Request) -> ResponseRepresentable {
@@ -32,6 +36,7 @@ struct AuthController {
       return verificationResponse
     }
     
-    return "credentials are ok"
+    let token = generateAuthToken.generate(with: "userId")
+    return "token = \(token)"
   }
 }
