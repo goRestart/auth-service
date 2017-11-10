@@ -1,4 +1,5 @@
 import CoreService
+import user_service_api
 
 extension Assembly {
   var authRouteCollection: AuthRouteCollection {
@@ -8,6 +9,12 @@ extension Assembly {
   }
   
   private var authController: AuthController {
-    return AuthController()
+    return AuthController(
+      userApi: userApi
+    )
+  }
+  
+  private var userApi: UserApi {
+    return UserServiceApiFactory.make()
   }
 }

@@ -14,7 +14,7 @@ struct AuthRouteCollection: RouteCollection  {
   
   func build(_ builder: RouteBuilder) throws {
     builder.post(Endpoint.login) { request in
-      return try authController.login(request)
+      return try self.authController.login(request)
     }
   }
 }
