@@ -3,24 +3,24 @@
 import PackageDescription
 
 let package = Package(
-  name: "template-service",
+  name: "auth-service",
   products: [
     .library(name: "App", targets: ["App"]),
     .executable(name: "Run", targets: ["Run"])
   ],
   dependencies: [
     .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "2.3.0")),
-    .package(url: "https://github.com/vapor/fluent-provider.git", .upToNextMajor(from: "1.3.0"))
-    ],
+    .package(url: "https://github.com/goRestart/core-service.git", .branch("develop")),
+    .package(url: "https://github.com/vapor/jwt-provider.git", .upToNextMajor(from: "1.3.0")),
+    .package(url: "https://github.com/goRestart/user-service-api.git", .branch("develop"))
+  ],
   targets: [
-    .target(name: "App", dependencies: ["Vapor", "FluentProvider"],
+    .target(name: "App", dependencies: ["Vapor", "CoreService", "JWTProvider"],
             exclude: [
               "Config",
               "Public",
               "Resources",
               ]),
-    .target(name: "Run", dependencies: ["App"]),
-    .testTarget(name: "AppTests", dependencies: ["App", "Testing"])
+    .target(name: "Run", dependencies: ["App"])
   ]
 )
-
