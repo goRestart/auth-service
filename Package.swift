@@ -15,7 +15,7 @@ let package = Package(
     .package(url: "https://github.com/goRestart/user-service-api.git", .branch("develop"))
   ],
   targets: [
-    .target(name: "App", dependencies: ["Vapor", "CoreService", "JWTProvider"],
+    .target(name: "App", dependencies: ["Vapor", "CoreService", "user-service-api", "JWTProvider"],
             exclude: [
               "Config",
               "Public",
