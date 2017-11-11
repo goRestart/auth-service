@@ -11,11 +11,11 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "2.3.0")),
     .package(url: "https://github.com/goRestart/core-service.git", .branch("develop")),
-    .package(url: "https://github.com/vapor/jwt-provider.git", .upToNextMajor(from: "1.3.0")),
+    .package(url: "https://github.com/vapor/jwt.git", .upToNextMajor(from: "2.3.0")),
     .package(url: "https://github.com/goRestart/user-service-api.git", .branch("develop"))
   ],
   targets: [
-    .target(name: "App", dependencies: ["Vapor", "CoreService", "user-service-api", "JWTProvider"],
+    .target(name: "App", dependencies: ["Vapor", "CoreService", "user-service-api", "JWT"],
             exclude: [
               "Config",
               "Public",
