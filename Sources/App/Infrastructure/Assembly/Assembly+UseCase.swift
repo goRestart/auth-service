@@ -2,6 +2,8 @@ import CoreService
 
 extension Assembly {
   var generateAuthToken: GenerateAuthToken {
-    return GenerateAuthToken()
+    return GenerateAuthToken(
+      tokenGeneratorService: jwtTokenGeneratorService
+    )
   }
 }

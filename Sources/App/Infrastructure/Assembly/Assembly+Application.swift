@@ -8,9 +8,16 @@ extension Assembly {
     return droplet
   }
   
-  public var config: Config {
+  var config: Config {
     let config = try! Config()
     try! config.setup()
     return config
+  }
+  
+  var hasher: HashProtocol {
+    return CryptoHasher(
+      hash: .sha256,
+      encoding: .hex
+    )
   }
 }
