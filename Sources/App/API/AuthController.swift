@@ -9,17 +9,20 @@ private struct Parameter {
 
 struct AuthController {
 
-  private let userApi: UserApi
+  private let userServiceApiFactory: UserServiceApiFactory
   private let generateAuthToken: GenerateAuthToken
+  private let authTokenViewMapper: AuthTokenViewMapper
   
-  init(userApi: UserApi,
-       generateAuthToken: GenerateAuthToken)
+  init(userServiceApiFactory: UserServiceApiFactory,
+       generateAuthToken: GenerateAuthToken,
+       authTokenViewMapper: AuthTokenViewMapper)
   {
-    self.userApi = userApi
+    self.userServiceApiFactory = userServiceApiFactory
     self.generateAuthToken = generateAuthToken
+    self.authTokenViewMapper = authTokenViewMapper
   }
   
-  func login(_ request: Request) -> ResponseRepresentable {
+  func login(_ request: Request) throws -> ResponseRepresentable {
     guard let username = request.data[Parameter.username]?.string,
       let password = request.data[Parameter.password]?.string else {
         return Response.missingParameters
@@ -29,14 +32,20 @@ struct AuthController {
       password: password
     )
     
-    let verificationResponse = userApi.verify(credentials)
+    let verificationResponse = userServiceApiFactory.make().verify(credentials)
     let credentialsAreValid = verificationResponse.status == .ok
     
     guard credentialsAreValid else {
       return verificationResponse
     }
+  
+    let token = generateAuthToken.generate(
+      with: username
+    )
+    let authTokenViewModel = try authTokenViewMapper
+      .map(token)
+      .makeJSON()
     
-    let token = generateAuthToken.generate(with: "userId")
-    return "token = \(token)"
+    return try Response(status: .ok, json: authTokenViewModel)
   }
 }

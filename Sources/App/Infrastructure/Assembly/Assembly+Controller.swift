@@ -10,12 +10,13 @@ extension Assembly {
   
   private var authController: AuthController {
     return AuthController(
-      userApi: userApi,
-      generateAuthToken: generateAuthToken
+      userServiceApiFactory: userServiceApiFactory,
+      generateAuthToken: generateAuthToken,
+      authTokenViewMapper: authTokenViewMapper
     )
   }
   
-  private var userApi: UserApi {
-    return UserServiceApiFactory.make()
+  private var userServiceApiFactory: UserServiceApiFactory {
+    return UserServiceApiFactory()
   }
 }
