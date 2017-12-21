@@ -1,5 +1,6 @@
 import JWT
 import Vapor
+import user_service_api
 
 private struct JWTConstraints {
   static let issuer = "auth.restart-api.com"
@@ -13,23 +14,25 @@ struct JWTPayloadBuilder {
     self.hasher = hasher
   }
   
-  func build(with identifier: String) -> JSON {
+  func build(for user: User) throws -> JSON {
     let issuer = IssuerClaim(
       string: JWTConstraints.issuer
     )
+    let timestamp = Int(Date().timeIntervalSince1970 * 1000)
     let issuedAt = IssuedAtClaim(
-      seconds: Int(Date().timeIntervalSince1970)
+      seconds: timestamp
     )
-    let hashedId = try! hasher.make(
-      identifier.lowercased()
-    ).makeString()
-    
     let subject = SubjectClaim(
-      string: hashedId
+      string: user.id.value
     )
-    
     return JSON([
-      issuer, issuedAt, subject
+      issuer, issuedAt, subject, try jwtId(for: user)
     ])
+  }
+  
+  private func jwtId(for user: User) throws -> JWTIDClaim {
+    return JWTIDClaim(
+      string: try hasher.make(user.id.value + JWTConstraints.issuer).makeString()
+    )
   }
 }

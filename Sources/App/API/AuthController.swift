@@ -9,17 +9,14 @@ private struct Parameter {
 
 struct AuthController {
 
-  private let userServiceApiFactory: UserServiceApiFactory
+  private let verifyUserCredentials: VerifyUserCredentials
   private let generateAuthToken: GenerateAuthToken
-  private let authTokenViewMapper: AuthTokenViewMapper
-  
-  init(userServiceApiFactory: UserServiceApiFactory,
-       generateAuthToken: GenerateAuthToken,
-       authTokenViewMapper: AuthTokenViewMapper)
+ 
+  init(verifyUserCredentials: VerifyUserCredentials,
+       generateAuthToken: GenerateAuthToken)
   {
-    self.userServiceApiFactory = userServiceApiFactory
+    self.verifyUserCredentials = verifyUserCredentials
     self.generateAuthToken = generateAuthToken
-    self.authTokenViewMapper = authTokenViewMapper
   }
   
   func login(_ request: Request) throws -> ResponseRepresentable {
@@ -32,20 +29,13 @@ struct AuthController {
       password: password
     )
     
-    let verificationResponse = userServiceApiFactory.make().verify(credentials)
-    let credentialsAreValid = verificationResponse.status == .ok
-    
-    guard credentialsAreValid else {
-      return verificationResponse
+    guard let userResponse = try verifyUserCredentials.execute(with: credentials) else {
+      return Response(status: .internalServerError)
     }
-  
-    let token = generateAuthToken.generate(
-      with: username
-    )
-    let authTokenViewModel = try authTokenViewMapper
-      .map(token)
-      .makeJSON()
-    
-    return try Response(status: .ok, json: authTokenViewModel)
+    guard let user = userResponse.user else {
+      return userResponse.response
+    }
+    let token = try generateAuthToken.generate(for: user)
+    return try token.makeResponse()
   }
 }

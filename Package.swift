@@ -9,7 +9,7 @@ let package = Package(
     .executable(name: "Run", targets: ["Run"])
   ],
   dependencies: [
-    .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "2.3.0")),
+    .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "2.4.0")),
     .package(url: "https://github.com/goRestart/core-service.git", .branch("develop")),
     .package(url: "https://github.com/vapor/jwt.git", .upToNextMajor(from: "2.3.0")),
     .package(url: "https://github.com/goRestart/user-service-api.git", .branch("develop"))

@@ -1,5 +1,6 @@
 import CoreService
 import JWT
+import Vapor
 
 extension Assembly {
   var jwtTokenGeneratorService: TokenGeneratorService {
@@ -16,9 +17,14 @@ extension Assembly {
   }
   
   private var signer: Signer {
+    guard let appConfig = config["app"] else {
+      fatalError()
+    }
+    guard let signerKey = appConfig["SIGNER_KEY"]?.string else {
+      fatalError("You must configure the signer key for the service")
+    }
     return HS512(
-      key: "4TMsSvPKpwUvvgY_f_5BcYfd73iRpiv0Pw3sF1z_TnAwu97YCnhe0ThaLtbxJiIWATmKxb7oKAQ".makeBytes()
+      key: signerKey.makeBytes()
     )
-    // TODO: Get key via environment variables
   }
 }

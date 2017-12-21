@@ -1,5 +1,5 @@
 import Foundation
 
-struct AuthToken {
+struct AuthToken: Codable {
   let token: String
 }

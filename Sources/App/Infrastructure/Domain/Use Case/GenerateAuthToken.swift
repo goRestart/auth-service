@@ -1,4 +1,5 @@
 import Foundation
+import user_service_api
 
 struct GenerateAuthToken {
   
@@ -8,7 +9,7 @@ struct GenerateAuthToken {
     self.tokenGeneratorService = tokenGeneratorService
   }
   
-  func generate(with userId: String) -> AuthToken {
-    return tokenGeneratorService.generate(with: userId)
+  func generate(for user: User) throws -> AuthToken {
+    return try tokenGeneratorService.generate(for: user)
   }
 }

@@ -1,5 +1,6 @@
 import Vapor
 import JWT
+import user_service_api
 
 struct JWTTokenGeneratorService: TokenGeneratorService {
   
@@ -13,9 +14,9 @@ struct JWTTokenGeneratorService: TokenGeneratorService {
     self.signer = signer
   }
   
-  func generate(with identifier: String) -> AuthToken {
-    let payload = jwtPayloadBuilder.build(
-      with: identifier
+  func generate(for user: User) throws -> AuthToken {
+    let payload = try jwtPayloadBuilder.build(
+      for: user
     )
     
     let token = try! JWT(
