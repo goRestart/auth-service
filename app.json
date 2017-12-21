@@ -1,7 +1,9 @@
 {
 	"name": "auth-service",
 	"scripts": {},
-	"env": {},
+	"env": {
+		"SIGNER_KEY": "$SIGNER_KEY"
+	},
 	"formation": {},
 	"addons": [
 	],
